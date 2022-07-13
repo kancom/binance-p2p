@@ -1,0 +1,110 @@
+{
+  "code": "000000",
+  "message": null,
+  "messageDetail": null,
+  "data": [
+    {
+      "orderNumber": "20382268565973348352",
+      "advNo": "11382256390186786816",
+      "tradeType": "SELL",
+      "asset": "USDT",
+      "fiat": "TRY",
+      "fiatSymbol": "₺",
+      "amount": "57.30000000",
+      "price": "17.45000000",
+      "totalPrice": "1000.00000000",
+      "orderStatus": 1,
+      "createTime": 1658133932000,
+      "currencyTicketSize": "0.01",
+      "assetTicketSize": "0.01",
+      "priceTicketSize": "0.01",
+      "sellerNickname": "binchanger",
+      "buyerNickname": "vicky",
+      "buyerCompanyAccountName": null,
+      "isBuyerCompanyAccount": null,
+      "buyerUserNo": "s093335bc8aab395389ccd1deef858a04",
+      "sellerUserNo": "s7870a388b47336e99868628d594287e3",
+      "sellerCompanyAccountName": null,
+      "isSellerCompanyAccount": null,
+      "makerNickname": "binchanger",
+      "makerUserNo": "s7870a388b47336e99868628d594287e3",
+      "confirmPayEndTime": null,
+      "notifyPayEndTime": 1658134832000,
+      "chatUnreadCount": 4,
+      "payMethods": [
+        {
+          "id": 16369505,
+          "payMethodId": "16369505",
+          "identifier": "Papara",
+          "tradeMethodName": "Papara",
+          "tradeMethodShortName": "Papara",
+          "tradeMethodBgColor": "#910799",
+          "fields": [
+            {
+              "fieldId": "30167000177816809472",
+              "fieldName": "Full name",
+              "fieldContentType": "payee",
+              "sequence": null,
+              "restrictionType": 0,
+              "lengthLimit": 100,
+              "isRequired": true,
+              "isCopyable": true,
+              "isDisplay": null,
+              "hintWord": "Please enter your full name",
+              "fieldValue": "АНДРЕЙ СЕРГЕЕВИЧ КАШИРИ"
+            },
+            {
+              "fieldId": "30172782358898204672",
+              "fieldName": "Papara account number",
+              "fieldContentType": "single_text",
+              "sequence": null,
+              "restrictionType": 0,
+              "lengthLimit": 100,
+              "isRequired": true,
+              "isCopyable": true,
+              "isDisplay": null,
+              "hintWord": "Please enter your Papara account number",
+              "fieldValue": "1437177060"
+            },
+            {
+              "fieldId": "30172782499207815168",
+              "fieldName": "Phone number",
+              "fieldContentType": "single_text",
+              "sequence": null,
+              "restrictionType": 1,
+              "lengthLimit": 100,
+              "isRequired": false,
+              "isCopyable": true,
+              "isDisplay": null,
+              "hintWord": "Please enter your phone number",
+              "fieldValue": ""
+            },
+            {
+              "fieldId": "30172782589930467328",
+              "fieldName": "Email",
+              "fieldContentType": "single_text",
+              "sequence": null,
+              "restrictionType": 0,
+              "lengthLimit": 100,
+              "isRequired": false,
+              "isCopyable": true,
+              "isDisplay": null,
+              "hintWord": "Please enter your email address",
+              "fieldValue": ""
+            }
+          ],
+          "iconUrlColor": "/image/admin_mgs_image_upload/20201217/b95112bc-3a73-48d3-97df-1b3fb2356d0e.png",
+          "tradeMethodTips": null,
+          "online": false
+        }
+      ],
+      "selectedPayId": 0,
+      "complaintStatus": null,
+      "canCancelComplaintOrder": null,
+      "archived": false,
+      "isCancellationCountedForDailyLimit": false
+    }
+  ],
+  "total": 1,
+  "success": true
+}

@@ -1,0 +1,132 @@
+version: '3.8'
+
+x-log-rotation: &log-rotation
+  # driver: "json-file"
+  options:
+    max-size: "20m"
+    max-file: "3"
+
+services:
+  # ================================database service===================================
+  db:
+    image: mysql/mysql-server:8.0-aarch64
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: p2p
+      MYSQL_USER: p2p
+      MYSQL_PASSWORD: ${DB_PASS}
+    restart: on-failure
+    volumes:
+      - $VOLUME/mysql/:/var/lib/mysql
+    logging:
+      <<: *log-rotation
+    ports:
+      - "5001:3306"
+
+  db_migrate:
+    image: p2p_bot:dev
+    restart: on-failure
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_USER: ${DB_USER:-p2p}
+      DB_PASSWORD: ${DB_PASS}
+    logging:
+      <<: *log-rotation
+    command: pipenv run alembic upgrade head
+
+  # ================================redis service===================================
+  redis:
+    image: redis
+    restart: on-failure
+    logging:
+      <<: *log-rotation
+    ports:
+      - "5002:6379"
+
+  selenium:
+    # https://stackoverflow.com/questions/45323271/how-to-run-selenium-with-chrome-in-docker
+    # image: selenium/standalone-chrome:103.0
+    image: seleniarm/standalone-chromium
+    shm_size: '2gb'
+    ports:
+    #   - 4444:4444
+      - 5900:5900
+
+  celery:
+    image: p2p_bot:dev
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+      - selenium
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_DSN: ${DB_DSN}
+      DB_USER: ${DB_USER:-p2p}
+      DB_PASSWORD: ${DB_PASS}
+      DRIVER_URL: ${DRIVER_URL}
+      SERVICE: celery
+    logging:
+      <<: *log-rotation
+    command: pipenv run celery -A p2p.api.celery_main.app worker --loglevel=info
+
+  celery-periodic:
+    image: p2p_bot:dev
+    restart: on-failure
+    depends_on:
+      - redis
+      - celery
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_USER: ${DB_USER:-p2p}
+      DB_PASSWORD: ${DB_PASS}
+    logging:
+      <<: *log-rotation
+    command: pipenv run celery -A p2p.api.celery_main.app beat --loglevel=info 
+
+  api:
+    image: p2p_bot:dev
+    restart: on-failure
+    depends_on:
+      - db
+    # ports:
+    #   - 8000:8000
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_DSN: ${DB_DSN}
+      DRIVER_URL: ${DRIVER_URL}
+      SERVICE: api
+    logging:
+      <<: *log-rotation
+    command: pipenv run uvicorn p2p.api_main:app --host 0.0.0.0
+
+  bot:
+    image: p2p_bot:dev
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+      - api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DB_DSN: ${DB_DSN}
+      REDIS_DSN: ${REDIS_DSN}
+      TG_BOT_KEY: ${TG_BOT_KEY}
+    volumes:
+      - $VOLUME/conversationbot:/app/conversationbot
+    logging:
+      <<: *log-rotation
+    command: pipenv run python src/p2p/bot_main.py
+
